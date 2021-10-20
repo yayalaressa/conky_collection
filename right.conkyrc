@@ -1,0 +1,92 @@
+#avoid flicker
+double_buffer yes
+
+#own window to run simultanious 2 or more conkys
+own_window  yes
+own_window_transparent yes
+own_window_type desktop
+own_window_hints undecorate,sticky,skip_taskbar,skip_pager 
+ 
+#borders
+draw_borders no
+border_margin 3
+ 
+#shades
+draw_shades no
+ 
+#position
+gap_x 20
+gap_y 150
+alignment top_right
+ 
+#behaviour
+update_interval 1
+ 
+#colour
+color0 a9a9a9
+color1 a9a9a9
+color2 a9a9a9
+#default_color  8f8f8f
+default_color e9e9e9
+default_outline_color e9e9e9
+default_shade_color e9e9e9
+#default_shade_color 000000
+own_window_colour 262729
+ 
+#font
+use_xft yes
+xftfont monospace:size=9
+
+# Force UTF8? note that UTF8 support required XFT
+override_utf8_locale yes
+ 
+#to prevent window from moving
+use_spacer none
+minimum_size 1600
+maximum_width 420
+
+ 
+TEXT
+${alignr}${color2}${exec hostnamectl | grep 'Chassis:' | cut -d: -f2 | awk '{printf $1}'}
+${alignr}${color2}│${color0}
+${alignr}${color2}│${color0}
+${alignr}cpu ${color2}╴─┤${color0}
+${alignr}${color1}[${color0} ${execi 1000 cat /proc/cpuinfo | grep "model name" | sed -e 's/model name.*: //'| uniq} ${color1}]${color0} ${color2}╴─┤   │${color0}
+${alignr}use ${color2}╴─┤   │${color0}
+${alignr}${color1}[${color0}${cpu cpu1}% ${color1}]${color0} CPU1 ${color1}[${color0}${cpu cpu1}% ${color1}]${color0} CPU2 ${color2}╴─┤   │   │${color0}
+${alignr}${color1}[${color0}${cpu cpu3}% ${color1}]${color0} CPU3 ${color1}[${color0}${cpu cpu4}% ${color1}]${color0} CPU4 ${color2}╴─┤   │   │${color0}
+${alignr}${color2}│   │   │${color0}
+${alignr}${color1}${cpugraph 10, 248}${color0} ${color2}╴─┘   │   │${color0}
+${alignr}processes ${color2}╴─┤   │${color0}
+${alignr}${color1}[${color0}${color0}$processes ${color1}]${color0}   total ${color2}╴─┤   │   │${color0}
+${alignr}${color1}[${color0}$running_processes ${color1}]${color0} running ${color2}╴─┘   │   │${color0}
+${alignr}name               cpu    mem   pid      ${color2}│       │   │${color0}
+${alignr}${color1}[${color0} ${top name 1} ${top cpu 1} ${top mem 1} ${top pid 1} ${color1}]${color0} ${color2}╴─┤       │   │${color0}
+${alignr}${color1}[${color0} ${top name 2} ${top cpu 2} ${top mem 2} ${top pid 2} ${color1}]${color0} ${color2}╴─┤       │   │${color0}
+${alignr}${color1}[${color0} ${top name 3} ${top cpu 3} ${top mem 3} ${top pid 3} ${color1}]${color0} ${color2}╴─┘       │   │${color0}
+${alignr}temp ${color2}╴─┘   │${color0}
+${alignr}${color1}[${color0} ${exec sensors | grep "fan1:" | cut -d: -f2 | awk '{printf $1 " RPM"}'} ${color1}]${color0} ${color1}[${color0} ${exec sensors | grep "CPU:" | cut -d: -f2 | awk '{printf $1}'} ${color1}]${color0} ${color2}╴─┘       │${color0}
+${alignr}gpu ${color2}╴─┤${color0}
+${alignr}use ${color2}╴─┤   │${color0}
+${alignr}* ${color2}╴─┘   │   │${color0}
+${alignr}temp ${color2}╴─┘   │${color0}
+${alignr}${color1}[${color0} ${exec sensors | grep "GPU:" | cut -d: -f2 | awk '{printf $1}'} ${color1}]${color0} ${color2}╴─┘       │${color0}
+${alignr}memory ${color2}╴─┤${color0}
+${alignr}ram ${color2}╴─┤   │${color0}
+${alignr}${color1}[${color0}$memperc% ${color1}]${color0} ${color2}╴─┤   │   │${color0}
+${alignr}${color1}[${color0} $mem / $memmax ${color1}]${color0} ${color2}╴─┤   │   │${color0}
+${alignr}${color2}│   │   │${color0}
+${alignr}${color1}${memgraph 10, 248}${color0} ${color2}╴─┘   │   │${color0}
+${alignr}swap ${color2}╴─┘   │${color0}
+${alignr}${color1}[${color0} $swap / $swapmax ${color1}]${color0} ${color2}╴─┘       │${color0}
+${alignr}drives ${color2}╴─┘${color0}
+${alignr}/dev/sda1 ${color2}╴─┤    ${color0}
+${alignr}${color1}[${color0} ${fs_used /} / ${fs_size /} ${color1}]${color0} ${color2}╴─┘   │    ${color0}
+${alignr}/dev/sdb1 ${color2}╴─┤    ${color0}
+${alignr}${color1}[${color0} ${fs_used /var/data} / ${fs_size /var/data} ${color1}]${color0} ${color2}╴─┘   │    ${color0}
+${alignr}/dev/sdb2 ${color2}╴─┤    ${color0}
+${alignr}${color1}[${color0} ${fs_used /var/software} / ${fs_size /var/software} ${color1}]${color0} ${color2}╴─┘   │    ${color0}
+${alignr}read ${color2}╴─┤    ${color0}
+${alignr}${color1}${diskiograph_read 10, 248}${color0} ${color2}╴─┘   │    ${color0}
+${alignr}write ${color2}╴─┘    ${color0}
+${alignr}${color1}${diskiograph_write 10, 248}${color0} ${color2}╴─┘        ${color0}
